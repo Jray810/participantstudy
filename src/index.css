@@ -1,13 +1,265 @@
+/* Import Source Sans Pro Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #232129;
+  background-color: #fdfdfd;
+  margin: 0 !important;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.super-container {
+  padding: 0;
+  height: 100vh;
+}
+
+main {
+  min-height: calc(100vh - 52px);
+  padding: 0;
+  border-top: 4px solid #900C3F;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 1.2;
+  color: inherit;
+}
+
+h3 {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+h5 {
+  color: #5f6368;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  line-height: 0.8rem;
+  text-transform: uppercase;
+}
+
+div {
+  padding: 0.5rem;
+}
+
+a {
+  text-decoration: none;
+  border-bottom: 1px solid #C70039;
+  color: #C70039;
+  cursor: pointer;
+}
+
+a:hover {
+  border-bottom: 1px solid #900C3F;
+  color: #900C3F;
+}
+
+.top-border {
+  border-top: solid 1px lightgray;
+  padding-top: 1rem;
+}
+
+button {
+  color: white;
+  background: #900C3F;
+  border: 2px solid #900C3F;
+  font-weight: 600;
+  padding: 5px 10px;
+  margin: 0.1em;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+button:hover {
+  color: #900C3F;
+  background: transparent;
+}
+
+.upper-section {
+  display: flex;
+}
+
+.lower-section {
+  display: flex;
+  border-top: 1px solid #900C3F;
+}
+
+.lower-third {
+  width: 33%;
+  text-align: center;
+}
+
+.focus-box {
+  border: 2px solid #900C3F;
+  padding: 0 1rem;
+  color: #900C3F;
+  font-weight: bold;
+  text-align: center;
+}
+
+.expr-box {
+  border: 2px solid #900C3F;
+  color: #900C3F;
+  padding: 0 1rem;
+  margin: 0.5rem;
+  font-weight: bold;
+  min-height: 1.5rem;
+  width: 240px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.expr-sub-box {
+  padding: 0;
+  width: 80px;
+  text-align: center;
+}
+
+.state-box {
+  border: 2px solid #900C3F;
+  color: #900C3F;
+  font-weight: bold;
+  padding: 0;
+}
+
+/* Keyboard style */
+.keyboard {
+  padding: 1em 0;
+  display: flex;
+}
+/* Key Box */
+.key-box {
+  margin: auto;
+}
+/* Top row for keyboard */
+.top-row {
+  margin: 0 0 0 3.25rem;
+  padding: 0;
+}
+/* Middle row for keyboard */
+.middle-row {
+  padding: 0;
+  display: inline-flex;
+}
+/* Bottom row for keyboard */
+.bottom-row {
+  padding: 0;
+}
+/* Style for each Key */
+.key {
+  /* background-color: #353943; */
+  border: 2px solid #900C3F;
+  border-radius: 1rem;
+  box-shadow: 5px 5px #c2b7ab;
+  line-height: 1;
+  width: 2.5rem;
+  margin: 0.25rem;
+  padding: 0;
+  text-align: center;
+  top: 0;
+  left: 0;
+  transition: all 0.07s ease-in-out;
+  cursor: pointer;
+}
+.key:hover {
+  background-color: #900C3F;
+  color: white;
+}
+/* Style for Enter Key */
+.enter-key {
+  border: 2px solid #900C3F;
+  border-radius: 1rem;
+  box-shadow: 5px 5px #c2b7ab;
+  line-height: 1;
+  width: 9rem;
+  margin: 0.25rem;
+  padding: 0;
+  text-align: center;
+  top: 0;
+  left: 0;
+  transition: all 0.07s ease-in-out;
+  cursor: pointer;
+}
+.enter-key:hover {
+  background-color: #900C3F;
+  color: white;
+}
+/* Active Class for Key */
+.activeKey {
+  transform: scale(1.1);
+  position: relative;
+  top: 0.2em;
+  left: 0.2em;
+  box-shadow: 0 0 0 0;
+  color: white;
+  background-color: #900C3F;
+}
+/* Sets font size for each Key */
+.key > p {
+  font-size: 1.25em;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+}
+/* Sets font size for Enter Key */
+.enter-key > p {
+  font-size: 1.25em;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+}
+
+.sample-image {
+  max-width: 80px;
+}
+
+.interface-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+table {
+  margin: auto;
+}
+
+th {
+  text-align: left;
+}
+
+td {
+  border-top: 1px solid #900C3F;
+  padding: 0.25rem;
+}
+
+input[type=submit] {
+  color: white;
+  background: #900C3F;
+  border: 2px solid #900C3F;
+  font-weight: 600;
+  padding: 5px 10px;
+  margin: 0.1em;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+input[type=submit]:hover {
+  color: #900C3F;
+  background: transparent;
 }

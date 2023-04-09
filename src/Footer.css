@@ -1,0 +1,84 @@
+/* Imported CSS for Footer from different project */
+
+.site-footer {
+  width: 100%;
+  z-index: 2;
+  background-color: #900C3F;
+  padding: 0;
+}
+
+.footer-nav {
+  padding: 0;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-h5 {
+  color: white;
+  margin: 0;
+}
+
+.footer-link {
+  color: white;
+  border: none;
+  transition: border .4s ease-in-out;
+}
+
+.footer-link:hover {
+  color: white;
+  border-bottom: solid 1px white;
+}
+
+.nav-left {
+  padding: 0;
+  line-height: auto;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nav-right {
+  padding: 0;
+  line-height: auto;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nav-item {
+  padding: 0 1rem 0 1rem;
+  line-height: 1;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  border-radius: 0.5rem;
+  transition: background-color .4s ease-in-out;
+}
+
+.nav-item-link:hover {
+  background-color: #C70039;
+}
+
+.nav-item-link:hover > a {
+  color: white;
+}
+
+@media only screen and (max-width: 568px) {
+  .mobile-hide {
+    display: none;
+  }
+  .mobile-show {
+    display: flex;
+  }
+}
+
+.width-control {
+  margin-left: auto;
+  margin-right: auto;
+}
