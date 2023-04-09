@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "/participantstudy/static/css/main.19ebce7b.css",
-    "main.js": "/participantstudy/static/js/main.6b346d8c.js",
+    "main.css": "/participantstudy/static/css/main.4b78fd50.css",
+    "main.js": "/participantstudy/static/js/main.0b58b8f6.js",
     "static/js/27.ace5fd79.chunk.js": "/participantstudy/static/js/27.ace5fd79.chunk.js",
     "index.html": "/participantstudy/index.html"
   },
   "entrypoints": [
-    "static/css/main.19ebce7b.css",
-    "static/js/main.6b346d8c.js"
+    "static/css/main.4b78fd50.css",
+    "static/js/main.0b58b8f6.js"
   ]
 }
