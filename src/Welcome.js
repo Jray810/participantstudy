@@ -27,7 +27,7 @@ function Welcome() {
       </div>
       <div style={{margin: "auto"}}>
         <div>
-          Thank you for volunteering to participate in this study. Please note that a <b>computer with a keyboard is necessary for completing this study</b>, please make sure that you are setup properly before proceeding.
+          Thank you for volunteering to participate in this study. Please note that a <b>computer with a keyboard is highly recommended for completing this study</b> and that small mobile devices like smartphones may not render the system properly. Please make sure that you are setup properly before proceeding.
         </div>
         <div>
           This study must be completed in one sitting and is timed. The study should take netween <b>N</b> to <b>M</b> minutes total. Please do not refresh the webpage during the study.
