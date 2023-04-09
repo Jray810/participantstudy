@@ -1,12 +1,14 @@
 {
   "files": {
-    "main.css": "/participantstudy/static/css/main.4b78fd50.css",
-    "main.js": "/participantstudy/static/js/main.0b58b8f6.js",
+    "main.css": "/participantstudy/static/css/main.1a689f49.css",
+    "main.js": "/participantstudy/static/js/main.1fb64e57.js",
     "static/js/27.ace5fd79.chunk.js": "/participantstudy/static/js/27.ace5fd79.chunk.js",
+    "static/media/bulb.png": "/participantstudy/static/media/bulb.6780f593db766cf99616.png",
+    "static/media/fig1.png": "/participantstudy/static/media/fig1.5359da4e6d5bede0493a.png",
     "index.html": "/participantstudy/index.html"
   },
   "entrypoints": [
-    "static/css/main.4b78fd50.css",
-    "static/js/main.0b58b8f6.js"
+    "static/css/main.1a689f49.css",
+    "static/js/main.1fb64e57.js"
   ]
 }
