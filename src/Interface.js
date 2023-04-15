@@ -16,8 +16,14 @@ import { logErrorPress } from './app/keypressSlice';
 import { addPackage } from './app/statPackageSlice';
 import { addCheckpoint } from './app/checkpointSlice';
 import { useTour } from '@reactour/tour';
+import audio from './static/error_sound.mp3';
 
 function Interface() {
+  // Audio for error
+  function playAudio() {
+    new Audio(audio).play();
+  };
+  
   const stateSelector = useSelector((state) => state.exp_state.value);
   const user_interface = useSelector((state) => state.interface.value);
   const user_stats = useSelector((state) => state.stats.value);
@@ -120,6 +126,7 @@ function Interface() {
         dispatch(addSplit());
       } else {
         dispatch(triggerError('Invalid split position!'));
+        playAudio();
         // Reset commit flag
         dispatch(triggerCommit());
         // Add an error press

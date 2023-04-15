@@ -5,8 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import useKeypress from 'react-use-keypress';
 import { nextMode, nextFeature, nextOperator, moveSplit, addFeature, removeFeature, addOperator, removeOperator, sortAsc, sortDesc, triggerCommit, triggerError, resetError } from './app/interfaceSlice';
 import { logKeypress } from './app/keypressSlice';
+import audio from './static/error_sound.mp3';
 
 function Keyboard() {
+  // Audio for error
+  function playAudio() {
+    new Audio(audio).play();
+  };
+
   // React states
   const [activeKey, setActiveKey] = useState('');
   const stateSelector = useSelector((state) => state.exp_state.value);
@@ -37,6 +43,7 @@ function Keyboard() {
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Feature not in expression!"));
+          playAudio();
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
@@ -46,6 +53,7 @@ function Keyboard() {
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Operator not in expression!"));
+          playAudio();
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
@@ -55,12 +63,14 @@ function Keyboard() {
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Invalid Expression, Cannot Sort!"));
+          playAudio();
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
       case 3:
         if (user_interface.sort === 0) {
           dispatch(triggerError("Cannot Split, No Sort Defined!"));
+          playAudio();
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         } else {
           if (user_interface.splitPosition !== 0) {
@@ -68,12 +78,14 @@ function Keyboard() {
             dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
           } else {
             console.log("Can't move split!");
+            playAudio();
             dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
           }
         }
         break;
       default:
         console.log("No Mapped Action!");
+        playAudio();
         dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         break;
     }
@@ -99,6 +111,7 @@ function Keyboard() {
         break;
       default:
         console.log("No Mapped Action!");
+        playAudio();
         dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         break;
     }
@@ -123,6 +136,7 @@ function Keyboard() {
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Cannot add this feature!"));
+          playAudio();
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
@@ -132,6 +146,7 @@ function Keyboard() {
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Cannot add this operator!"));
+          playAudio();
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
@@ -141,12 +156,14 @@ function Keyboard() {
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Invalid Expression, Cannot Sort!"));
+          playAudio();
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
       case 3:
         if (user_interface.sort === 0) {
           dispatch(triggerError("Cannot Split, No Sort Defined!"));
+          playAudio();
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         } else {
           if (user_interface.splitPosition !== user_interface.numSamples + 1) {
@@ -154,12 +171,14 @@ function Keyboard() {
             dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
           } else {
             console.log("Can't move split!");
+            playAudio();
             dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
           }
         }
         break;
       default:
         console.log("No Mapped Action!");
+        playAudio();
         dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         break;        
     }
@@ -180,6 +199,7 @@ function Keyboard() {
       dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
     } else {
       console.log("No Mapped Action!");
+      playAudio();
       dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
     }
   }
