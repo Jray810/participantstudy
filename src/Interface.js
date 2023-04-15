@@ -180,7 +180,7 @@ function Interface() {
   // https://www.geeksforgeeks.org/how-to-create-a-countdown-timer-using-reactjs/#
   const countdownRef = useRef(null);
   const [countdownMin, setCountdownMin] = useState(0);
-  const [countdownSec, setCountdownSec] = useState(0);
+  const [countdownSec, setCountdownSec] = useState(1);
   const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
     const seconds = Math.floor((total / 1000) % 60);
@@ -194,11 +194,17 @@ function Interface() {
     if (total >= 0) {
       setCountdownMin(minutes);
       setCountdownSec(seconds);
+    } else {
+      if (!user_interface.completed) {
+        dispatch(makeSubmission());
+      }
+      setCountdownMin(0);
+      setCountdownSec(0);
     }
   }
   const clearCountdown = (e) => {
-    setCountdownMin(10);
-    setCountdownSec(0);
+    setCountdownMin(0);
+    setCountdownSec(10);
     if (countdownRef.current) clearInterval(countdownRef.current);
     const id = setInterval(() => {
       startCountdown(e);
@@ -207,7 +213,7 @@ function Interface() {
   }
   const getDeadTime = () => {
     let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 10 * 60);
+    deadline.setSeconds(deadline.getSeconds() + 10);
     return deadline;
   }
   useEffect(() => {
@@ -245,7 +251,6 @@ function Interface() {
   useEffect(() => {
     clearStopwatch(new Date());
   }, []);
-
 
   return (
     <div className='interface-container'>
@@ -304,7 +309,7 @@ function Interface() {
                 </div>
               }
               {
-                (stateSelector === 'Analogy' || user_stats.score !== 100) &&
+                !(stateSelector === 'Analogy' && countdownMin === 0 && countdownSec === 0) && (user_stats.score !== 100) &&
                 <div>
                   <button onClick={() => retry()}>Try Again</button>
                 </div>
@@ -344,10 +349,10 @@ function Interface() {
           <Keyboard/>
           <div style={{textAlign: 'right'}}><img style={{height: '1rem'}} src={helpIcon}/> <span>User Manual</span></div>
           {
-            useSelector === 'Analogy' && <div style={{textAlign: 'right'}}>Time Remaining: <b>{countdownMin}m {countdownSec}s</b></div>
+            stateSelector === 'Analogy' && <div style={{textAlign: 'right'}}>Time Remaining: <b>{countdownMin}m {countdownSec}s</b></div>
           }
           {
-            useSelector !== 'Analogy' && <div style={{textAlign: 'right'}}>Time Elapsed: <b>{countupMin}m {countupSec}s</b></div>
+            stateSelector !== 'Analogy' && <div style={{textAlign: 'right'}}>Time Elapsed: <b>{countupMin}m {countupSec}s</b></div>
           }          
           <div style={{textAlign: 'right'}}><button onClick={() => giveUp()}>Give Up</button></div>
         </div>
