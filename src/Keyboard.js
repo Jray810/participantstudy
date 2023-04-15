@@ -50,16 +50,26 @@ function Keyboard() {
         }
         break;
       case 2:
-        dispatch(sortDesc());
-        dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
-        break;
-      case 3:
-        if (user_interface.splitPosition !== 0) {
-          dispatch(moveSplit(-1));
+        if ((user_interface.exprVar1 !== -1 && user_interface.exprOp === -1 && user_interface.exprVar2 === -1) || (user_interface.exprVar1 !== -1 && user_interface.exprOp !== -1 && user_interface.exprVar2 !== -1)) {
+          dispatch(sortDesc());
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
-          console.log("Can't move split!");
+          dispatch(triggerError("Invalid Expression, Cannot Sort!"));
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
+        }
+        break;
+      case 3:
+        if (user_interface.sort === 0) {
+          dispatch(triggerError("Cannot Split, No Sort Defined!"));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
+        } else {
+          if (user_interface.splitPosition !== 0) {
+            dispatch(moveSplit(-1));
+            dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
+          } else {
+            console.log("Can't move split!");
+            dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
+          }
         }
         break;
       default:
@@ -126,15 +136,26 @@ function Keyboard() {
         }
         break;
       case 2:
-        dispatch(sortAsc());
-        break;
-      case 3:
-        if (user_interface.splitPosition !== user_interface.numSamples + 1) {
-          dispatch(moveSplit(1));
+        if ((user_interface.exprVar1 !== -1 && user_interface.exprOp === -1 && user_interface.exprVar2 === -1) || (user_interface.exprVar1 !== -1 && user_interface.exprOp !== -1 && user_interface.exprVar2 !== -1)) {
+          dispatch(sortAsc());
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
-          console.log("Can't move split!");
+          dispatch(triggerError("Invalid Expression, Cannot Sort!"));
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
+        }
+        break;
+      case 3:
+        if (user_interface.sort === 0) {
+          dispatch(triggerError("Cannot Split, No Sort Defined!"));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
+        } else {
+          if (user_interface.splitPosition !== user_interface.numSamples + 1) {
+            dispatch(moveSplit(1));
+            dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
+          } else {
+            console.log("Can't move split!");
+            dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
+          }
         }
         break;
       default:

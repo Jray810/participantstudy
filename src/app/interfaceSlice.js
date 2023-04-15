@@ -69,30 +69,43 @@ export const interfaceSlice = createSlice({
       } else if (state.value.exprVar2 === -1 && state.value.exprVar1 !== action.payload) {
         state.value.exprVar2 = action.payload;
       }
+      // Reset sort and split
+      state.value.sort = 0;
+      state.value.splitPosition = 0;
     },
     removeFeature: (state, action) => {
       if (state.value.exprVar1 === action.payload) {
-        state.value.exprVar1 = -1;
+        state.value.exprVar1 = state.value.exprVar2;
+        state.value.exprVar2 = -1;
       }
       if (state.value.exprVar2 === action.payload) {
         state.value.exprVar2 = -1;
       }
+      // Reset sort and split
+      state.value.sort = 0;
+      state.value.splitPosition = 0;
     },
     addOperator: (state, action) => {
-      if (state.value.exprOp === -1 && state.value.exprVar1 !== -1) {
-        state.value.exprOp = action.payload;
-      }
+      state.value.exprOp = action.payload;
+      // Reset sort and split
+      state.value.sort = 0;
+      state.value.splitPosition = 0;
     },
     removeOperator: (state, action) => {
-      if (state.value.exprOp === action.payload) {
-        state.value.exprOp = -1
-      }
+      state.value.exprOp = -1;
+      // Reset sort and split
+      state.value.sort = 0;
+      state.value.splitPosition = 0;
     },
     sortAsc: (state) => {
       state.value.sort = 1;
+      // Reset split
+      state.value.splitPosition = 0;
     },
     sortDesc: (state) => {
       state.value.sort = -1;
+      // Reset split
+      state.value.splitPosition = 0;
     },
     triggerCommit: (state) => {
       state.value.commit = !state.value.commit;

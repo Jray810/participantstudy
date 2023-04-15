@@ -195,7 +195,7 @@ function Interface() {
       setCountdownMin(minutes);
       setCountdownSec(seconds);
     } else {
-      if (!user_interface.completed) {
+      if (stateSelector === 'Analogy' && !user_interface.completed) {
         dispatch(makeSubmission());
       }
       setCountdownMin(0);
