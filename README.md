@@ -23,3 +23,5 @@ This project has the following libraries installed:
 - [`firebase`](https://firebaseopensource.com/projects/rakannimer/react-firebase/)
 
 - [`react-use-keypress`](https://www.npmjs.com/package/react-use-keypress)
+
+- [`@reactour/tour`](https://www.npmjs.com/package/@reactour/tour)

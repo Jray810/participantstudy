@@ -264,3 +264,22 @@ input[type=submit]:hover {
   color: #900C3F;
   background: transparent;
 }
+
+.user-manual {
+  cursor: pointer;
+  text-align: right;
+}
+
+.user-manual:hover {
+  color: #900C3F;
+  font-weight: bold;
+}
+
+.tour-close {
+  color: black;
+  background: none;
+  border: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+}

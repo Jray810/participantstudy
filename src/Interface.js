@@ -5,7 +5,7 @@ import Keyboard from './Keyboard';
 import { useSelector, useDispatch } from 'react-redux';
 import { triggerCommit, addToCompletedGroup, addToSplitQueue, removeFirstSplitQueue, resetInterface, resetCompleted, initializeInterface, makeSubmission, triggerError, fullReset } from './app/interfaceSlice';
 import { checkUniformClass } from './helpers';
-import { addAttempt, addSplit, calcScore, resetSplit } from './app/statSlice';
+import { addAttempt, addSplit, calcScore, openedTutorial, resetSplit } from './app/statSlice';
 import AnalogDisplay from './AnalogDisplay';
 import TestDisplay from './TestDisplay';
 import { analog_data } from './data/analogData';
@@ -15,6 +15,7 @@ import helpIcon from './help_FILL0_wght400_GRAD0_opsz24.png';
 import { logErrorPress } from './app/keypressSlice';
 import { addPackage } from './app/statPackageSlice';
 import { addCheckpoint } from './app/checkpointSlice';
+import { useTour } from '@reactour/tour';
 
 function Interface() {
   const stateSelector = useSelector((state) => state.exp_state.value);
@@ -203,8 +204,8 @@ function Interface() {
     }
   }
   const clearCountdown = (e) => {
-    setCountdownMin(0);
-    setCountdownSec(10);
+    setCountdownMin(10);
+    setCountdownSec(0);
     if (countdownRef.current) clearInterval(countdownRef.current);
     const id = setInterval(() => {
       startCountdown(e);
@@ -213,11 +214,14 @@ function Interface() {
   }
   const getDeadTime = () => {
     let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 10);
+    deadline.setSeconds(deadline.getSeconds() + 10 * 60);
     return deadline;
   }
   useEffect(() => {
     clearCountdown(getDeadTime());
+    if (stateSelector === 'Analogy') {
+      setIsOpen(true);
+    }
   }, []);
 
   // Countup Stopwatch Implementation
@@ -252,14 +256,23 @@ function Interface() {
     clearStopwatch(new Date());
   }, []);
 
+  // Reactour
+  const { setIsOpen, setCurrentStep } = useTour();
+
+  function startTour() {
+    setIsOpen(true);
+    setCurrentStep(0);
+    dispatch(openedTutorial());
+  }
+
   return (
-    <div className='interface-container'>
+    <div className='interface-container tour-home'>
       <div className='upper-section'>
         <div style={{width: "80%"}}>
           <div>
             <div style={{display: "flex", padding: "0"}}>
               <div style={{padding: "0", display: "flex", flexDirection: "column", justifyContent: "center"}}>Sort Expression: </div>
-              <div className='expr-box'>
+              <div className='expr-box tour-2'>
                 <div className='expr-sub-box'>{user_interface.exprVar1 === -1 ? '' : 'Feature ' + (user_interface.exprVar1 + 1)}</div>
                 {
                   (user_interface.exprOp !== -1 || user_interface.exprVar2 !== -1) && <div className='expr-sub-box'>{user_interface.exprOp === -1 ? (user_interface.exprVar2 === -1 ? '' : '?') : operators[user_interface.exprOp]}</div>
@@ -275,7 +288,7 @@ function Interface() {
           </div>
           {
             !user_interface.completed && sample_list.length !== 0 && 
-            <div style={{padding: "0"}}>
+            <div style={{padding: "0"}} className='tour-1'>
               <div>
                 Current Batch:
               </div>
@@ -288,7 +301,7 @@ function Interface() {
               {
                 stateSelector === 'Test' && <TestDisplay arr={displayList}/>
               }
-              <div>
+              <div className='tour-18'>
                 Batch Queue: <i>{user_interface.splitQueue.length} Unsorted Groups</i>
               </div>
             </div>
@@ -347,18 +360,18 @@ function Interface() {
               <div className='focus-box'>{user_interface.splitPosition === 0 || user_interface.splitPosition === user_interface.numSamples || displayList[user_interface.splitPosition - 1].calcExpr === displayList[user_interface.splitPosition + 1].calcExpr ? 'Invalid' : 'Valid'}</div>
           }
           <Keyboard/>
-          <div style={{textAlign: 'right'}}><img style={{height: '1rem'}} src={helpIcon}/> <span>User Manual</span></div>
+          <div className='user-manual' onClick={() => startTour()}><img style={{height: '1rem'}} src={helpIcon}/> <span>User Manual</span></div>
           {
             stateSelector === 'Analogy' && <div style={{textAlign: 'right'}}>Time Remaining: <b>{countdownMin}m {countdownSec}s</b></div>
           }
           {
             stateSelector !== 'Analogy' && <div style={{textAlign: 'right'}}>Time Elapsed: <b>{countupMin}m {countupSec}s</b></div>
           }          
-          <div style={{textAlign: 'right'}}><button onClick={() => giveUp()}>Give Up</button></div>
+          <div style={{textAlign: 'right'}}><button onClick={() => giveUp()} className='tour-20'>Give Up</button></div>
         </div>
       </div>
       <div className='lower-section'>
-        <div className='lower-third'>
+        <div className='lower-third tour-17 tour-19'>
           Percent Separated: <b>{user_interface.numCompleted / user_interface.numSamples * 100}%</b>
           <br/>
           Number of Splits: <b>{user_stats.numSplits}</b>

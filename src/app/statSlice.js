@@ -10,6 +10,7 @@ const initialState = {
     highScore: 0,
     maxSplits: -1,
     minSplits: -1,
+    tutorialsOpened: 0
   }
 }
 
@@ -47,10 +48,14 @@ export const statSlice = createSlice({
       state.value.score = 0;
       state.value.attempts = 0;
       state.value.highScore = 0;
+      state.value.tutorialsOpened = 0;
+    },
+    openedTutorial: (state) => {
+      state.value.tutorialsOpened += 1;
     }
   }
 })
 
-export const { initStats, addSplit, addAttempt, resetSplit, calcScore, resetStats } = statSlice.actions;
+export const { initStats, addSplit, addAttempt, resetSplit, calcScore, resetStats, openedTutorial } = statSlice.actions;
 
 export default statSlice.reducer;

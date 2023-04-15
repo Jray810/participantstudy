@@ -199,23 +199,23 @@ function Keyboard() {
       <div className="keyboard">
         <div className='key-box'>
           <div className="top-row">
-            <div className={`key ${activeKey === 'w' && 'activeKey'}`} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleWPress()}>
+            <div className={`key ${activeKey === 'w' && 'activeKey'}` + ' w-key'} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleWPress()}>
               <p>W</p>
             </div>
           </div>
-          <div className="middle-row">
-            <div className={`key ${activeKey === 'a' && 'activeKey'}`} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleAPress()}>
+          <div className="middle-row lr-key">
+            <div className={`key ${activeKey === 'a' && 'activeKey'}` + ' a-key'} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleAPress()}>
               <p>A</p>
             </div>
-            <div className={`key ${activeKey === 's' && 'activeKey'}`} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleSPress()}>
+            <div className={`key ${activeKey === 's' && 'activeKey'}` + ' s-key'} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleSPress()}>
               <p>S</p>
             </div>
-            <div className={`key ${activeKey === 'd' && 'activeKey'}`} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleDPress()}>
+            <div className={`key ${activeKey === 'd' && 'activeKey'}` + ' d-key'} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleDPress()}>
               <p>D</p>
             </div>
           </div>
           <div className="bottom-row">
-            <div className={`enter-key ${activeKey === 'Enter' && 'activeKey'}`} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleEnterPress()}>
+            <div className={`enter-key ${activeKey === 'Enter' && 'activeKey'}` + ' enter-key'} onTransitionEnd={() => handleTransitionEnd()} onClick={() => handleEnterPress()}>
               <p>Enter</p>
             </div>
           </div>

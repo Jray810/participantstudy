@@ -93,7 +93,7 @@ class SurveyForm extends React.Component {
     })
 
     // Submit state
-    // this.props.setExpState('Thanks');
+    this.props.setExpState('Thanks');
   }
 
   render() {
