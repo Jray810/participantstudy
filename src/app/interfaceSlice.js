@@ -123,7 +123,22 @@ export const interfaceSlice = createSlice({
       state.value.exprVar2 = -1;
       state.value.exprOp = -1;
       state.value.sort = 0;
-      state.value.numClassified = 0;
+    },
+    fullReset: (state) => {
+      state.value.splitQueue = [];
+      state.value.mode = 0;
+      state.value.feature = 0;
+      state.value.operator = 0;
+      state.value.numOperators = 3;
+      state.value.splitPosition = 0;
+      state.value.exprVar1 = -1;
+      state.value.exprVar2 = -1;
+      state.value.exprOp = -1;
+      state.value.sort = 0;
+      state.value.commit = false;
+      state.value.completedGroup = [];
+      state.value.numCompleted = 0;
+      state.value.errorMessage = '';
     },
     makeSubmission: (state) => {
       state.value.completed = true;
@@ -156,6 +171,7 @@ export const { initializeInterface,
                 addToSplitQueue,
                 removeFirstSplitQueue,
                 resetInterface,
+                fullReset,
                 makeSubmission,
                 resetCompleted,
                 triggerError,

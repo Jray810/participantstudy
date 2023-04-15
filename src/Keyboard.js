@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useKeypress from 'react-use-keypress';
 import { nextMode, nextFeature, nextOperator, moveSplit, addFeature, removeFeature, addOperator, removeOperator, sortAsc, sortDesc, triggerCommit, triggerError, resetError } from './app/interfaceSlice';
+import { logKeypress } from './app/keypressSlice';
 
 function Keyboard() {
   // React states
   const [activeKey, setActiveKey] = useState('');
+  const stateSelector = useSelector((state) => state.exp_state.value);
   const user_interface = useSelector((state) => state.interface.value);
   const dispatch = useDispatch();
 
@@ -16,9 +18,12 @@ function Keyboard() {
     dispatch(resetError());
     setActiveKey('w');
     dispatch(nextMode());
+    dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
   }
   useKeypress('w', () => {
-    handleWPress();
+    if (!user_interface.completed) {
+      handleWPress();
+    }
   });
 
   // List for A Keypress
@@ -29,34 +34,44 @@ function Keyboard() {
       case 0:
         if (user_interface.exprVar1 === user_interface.feature || user_interface.exprVar2 === user_interface.feature) {
           dispatch(removeFeature(user_interface.feature));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Feature not in expression!"));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
       case 1:
         if (user_interface.exprOp === user_interface.operator) {
           dispatch(removeOperator(user_interface.operator));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Operator not in expression!"));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
       case 2:
         dispatch(sortDesc());
+        dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         break;
       case 3:
         if (user_interface.splitPosition !== 0) {
           dispatch(moveSplit(-1));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           console.log("Can't move split!");
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
       default:
         console.log("No Mapped Action!");
+        dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         break;
     }
   }
   useKeypress('a', () => {
-    handleAPress();
+    if (!user_interface.completed) {
+      handleAPress();
+    }
   });
 
   // Listen for S Keypress
@@ -66,17 +81,22 @@ function Keyboard() {
     switch (user_interface.mode) {
       case 0:
         dispatch(nextFeature());
+        dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         break;
       case 1:
         dispatch(nextOperator());
+        dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         break;
       default:
         console.log("No Mapped Action!");
+        dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         break;
     }
   }
   useKeypress('s', () => {
-    handleSPress();
+    if (!user_interface.completed) {
+      handleSPress();
+    }
   });
 
   // Listen for D Keypress
@@ -87,17 +107,22 @@ function Keyboard() {
       case 0:
         if (user_interface.exprVar1 === -1 && user_interface.exprVar2 !== user_interface.feature) {
           dispatch(addFeature(user_interface.feature));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else if (user_interface.exprVar2 === -1 && user_interface.exprVar1 !== user_interface.feature) {
           dispatch(addFeature(user_interface.feature))
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Cannot add this feature!"));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
       case 1:
         if (user_interface.exprOp === -1 && user_interface.exprVar1 !== -1) {
           dispatch(addOperator(user_interface.operator));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           dispatch(triggerError("Cannot add this operator!"));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
       case 2:
@@ -106,17 +131,22 @@ function Keyboard() {
       case 3:
         if (user_interface.splitPosition !== user_interface.numSamples + 1) {
           dispatch(moveSplit(1));
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
         } else {
           console.log("Can't move split!");
+          dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         }
         break;
       default:
         console.log("No Mapped Action!");
+        dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         break;        
     }
   }
   useKeypress('d', () => {
-    handleDPress();
+    if (!user_interface.completed) {
+      handleDPress();
+    }
   });
 
   // Listen for Enter Keypress
@@ -126,12 +156,16 @@ function Keyboard() {
     if (user_interface.mode === 3 && user_interface.sort !== 0) {
       // Commit the split and update everything
       dispatch(triggerCommit());
+      dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
     } else {
       console.log("No Mapped Action!");
+      dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
     }
   }
   useKeypress('Enter', () => {
-    handleEnterPress();
+    if (!user_interface.completed) {
+      handleEnterPress();
+    }
   });
 
   // Key Animations

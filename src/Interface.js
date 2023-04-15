@@ -1,9 +1,9 @@
 // Analogy Interface Page
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Keyboard from './Keyboard';
 import { useSelector, useDispatch } from 'react-redux';
-import { triggerCommit, addToCompletedGroup, addToSplitQueue, removeFirstSplitQueue, resetInterface, resetCompleted, initializeInterface, makeSubmission, triggerError } from './app/interfaceSlice';
+import { triggerCommit, addToCompletedGroup, addToSplitQueue, removeFirstSplitQueue, resetInterface, resetCompleted, initializeInterface, makeSubmission, triggerError, fullReset } from './app/interfaceSlice';
 import { checkUniformClass } from './helpers';
 import { addAttempt, addSplit, calcScore, resetSplit } from './app/statSlice';
 import AnalogDisplay from './AnalogDisplay';
@@ -12,6 +12,9 @@ import { analog_data } from './data/analogData';
 import { task_data } from './data/taskData';
 import { setExpState } from './app/stateSlice';
 import helpIcon from './help_FILL0_wght400_GRAD0_opsz24.png';
+import { logErrorPress } from './app/keypressSlice';
+import { addPackage } from './app/statPackageSlice';
+import { addCheckpoint } from './app/checkpointSlice';
 
 function Interface() {
   const stateSelector = useSelector((state) => state.exp_state.value);
@@ -118,6 +121,8 @@ function Interface() {
         dispatch(triggerError('Invalid split position!'));
         // Reset commit flag
         dispatch(triggerCommit());
+        // Add an error press
+        dispatch(logErrorPress({taskType: stateSelector}))
       }
     }
 
@@ -138,32 +143,109 @@ function Interface() {
         numSamples: task_data.length,
         samples: JSON.stringify(task_data)
       }));
-      dispatch(resetInterface());
-      dispatch(resetSplit());
     } else {
       dispatch(initializeInterface({
         numFeatures: 3,
         numSamples: analog_data.length,
         samples: JSON.stringify(analog_data)
       }));
-      dispatch(resetInterface());
-      dispatch(resetSplit());
     }
+    dispatch(fullReset());
+    dispatch(resetSplit());
   }
 
   // Proceed
   function proceed() {
     if (stateSelector === 'Analogy') {
+      // Mark end of Analogy Task
+      dispatch(addCheckpoint(3));
+      // Transition to Break before True Task
       dispatch(setExpState('Break'));
     } else {
+      // Mark end of True Task
+      dispatch(addCheckpoint(5));
+      // Transition to Survey
       dispatch(setExpState('Survey'));
     }
+    // Record Stat Package
+    dispatch(addPackage({taskType: stateSelector, package: JSON.stringify(user_stats)}));
   }
 
   // Give Up
   function giveUp() {
     dispatch(makeSubmission());
   }
+
+  // Countdown Timer Implementation
+  // https://www.geeksforgeeks.org/how-to-create-a-countdown-timer-using-reactjs/#
+  const countdownRef = useRef(null);
+  const [countdownMin, setCountdownMin] = useState(0);
+  const [countdownSec, setCountdownSec] = useState(0);
+  const getTimeRemaining = (e) => {
+    const total = Date.parse(e) - Date.parse(new Date());
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    return {
+      total, minutes, seconds
+    };
+  }
+  const startCountdown = (e) => {
+    let { total, minutes, seconds } = getTimeRemaining(e);
+    if (total >= 0) {
+      setCountdownMin(minutes);
+      setCountdownSec(seconds);
+    }
+  }
+  const clearCountdown = (e) => {
+    setCountdownMin(10);
+    setCountdownSec(0);
+    if (countdownRef.current) clearInterval(countdownRef.current);
+    const id = setInterval(() => {
+      startCountdown(e);
+    }, 1000);
+    countdownRef.current = id;
+  }
+  const getDeadTime = () => {
+    let deadline = new Date();
+    deadline.setSeconds(deadline.getSeconds() + 10 * 60);
+    return deadline;
+  }
+  useEffect(() => {
+    clearCountdown(getDeadTime());
+  }, []);
+
+  // Countup Stopwatch Implementation
+  const countupRef = useRef(null);
+  const [countupMin, setCountupMin] = useState(0);
+  const [countupSec, setCountupSec] = useState(0);
+  const getTimeElapsed = (e) => {
+    const total = Date.parse(new Date()) - Date.parse(e);
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    return {
+      total, minutes, seconds
+    };
+  }
+  const startStopwatch = (e) => {
+    let { total, minutes, seconds } = getTimeElapsed(e);
+    if (total >= 0) {
+      setCountupMin(minutes);
+      setCountupSec(seconds);
+    }
+  }
+  const clearStopwatch = (e) => {
+    setCountupMin(0);
+    setCountupSec(0);
+    if (countupRef.current) clearInterval(countupRef.current);
+    const id = setInterval(() => {
+      startStopwatch(e);
+    }, 1000);
+    countupRef.current = id;
+  }
+  useEffect(() => {
+    clearStopwatch(new Date());
+  }, []);
+
 
   return (
     <div className='interface-container'>
@@ -261,7 +343,12 @@ function Interface() {
           }
           <Keyboard/>
           <div style={{textAlign: 'right'}}><img style={{height: '1rem'}} src={helpIcon}/> <span>User Manual</span></div>
-          <div style={{textAlign: 'right'}}>Time Elapsed: <b>1m 23s</b></div>
+          {
+            useSelector === 'Analogy' && <div style={{textAlign: 'right'}}>Time Remaining: <b>{countdownMin}m {countdownSec}s</b></div>
+          }
+          {
+            useSelector !== 'Analogy' && <div style={{textAlign: 'right'}}>Time Elapsed: <b>{countupMin}m {countupSec}s</b></div>
+          }          
           <div style={{textAlign: 'right'}}><button onClick={() => giveUp()}>Give Up</button></div>
         </div>
       </div>

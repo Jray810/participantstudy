@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setExpState } from './app/stateSlice';
+import { db } from './firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { Timestamp } from "@firebase/firestore";
 
 class SurveyForm extends React.Component {
   constructor(props) {
@@ -19,7 +22,10 @@ class SurveyForm extends React.Component {
       q9: '',
       q10: '',
       q11: '',
-      q12: ''
+      q12: '',
+      checkpoint: props.checkpointData,
+      keypress: props.keypressData,
+      stats: props.statData,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -35,33 +41,59 @@ class SurveyForm extends React.Component {
     });
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
 
     console.log("Submitting results!");
 
-    // Submit everything to Firestore, or push to redux and trigger a submission
+    // Format checkpoints for submission
+    let checkpoints = {};
+    for (const [key, value] of Object.entries(this.state.checkpoint)) {
+      checkpoints[key] = Timestamp.fromDate(new Date(JSON.parse(value)));
+    }
+    checkpoints[6] = Timestamp.fromDate(new Date());
+
+    // Format Stats for submission
+    let stats = {};
+    stats["group"] = this.state.stats.group;
+    if (this.state.stats.analogy != "") {
+      stats["analogy"] = JSON.parse(this.state.stats.analogy);
+    } else {
+      stats["analogy"] = {};
+    }
+    if (this.state.stats.task != "") {
+      stats["task"] = JSON.parse(this.state.stats.task);
+    } else {
+      stats["task"] = {};
+    }
+
+    // Format Survey for submission
+    let survey = {
+      q1: this.state.q1,
+      q2: this.state.q2,
+      q3a: this.state.q3a,
+      q3b: this.state.q3b,
+      q4: this.state.q4,
+      q5: this.state.q5,
+      q6: this.state.q6,
+      q7: this.state.q7,
+      q8a: this.state.q8a,
+      q8b: this.state.q8b,
+      q9: this.state.q9,
+      q10: this.state.q10,
+      q11: this.state.q11,
+      q12: this.state.q12,
+    }
+
+    // Submit everything to Firestore
+    addDoc(collection(db, 'responses'), {
+      checkpoints: checkpoints,
+      keypresses: this.state.keypress,
+      stats: stats
+    })
 
     // Submit state
-    this.props.setExpState('Thanks');
-    
-    // Reset
-    this.setState({
-      q1: '',
-      q2: '',
-      q3a: '',
-      q3b: '',
-      q4: '',
-      q5: '',
-      q6: '',
-      q7: '',
-      q8a: '',
-      q8b: '',
-      q9: '',
-      q10: '',
-      q11: '',
-      q12: ''
-    });
+    // this.props.setExpState('Thanks');
   }
 
   render() {

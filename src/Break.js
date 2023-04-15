@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setExpState } from './app/stateSlice';
 import { addCheckpoint } from './app/checkpointSlice';
-import { initializeInterface, resetInterface } from './app/interfaceSlice';
+import { fullReset, initializeInterface } from './app/interfaceSlice';
 import { task_data, task_stats } from './data/taskData';
 import { initStats, resetStats } from './app/statSlice';
 
@@ -11,14 +11,14 @@ function Break() {
 
   function begin() {
     // Record Checkpoint Timestamp
-    dispatch(addCheckpoint(3));
+    dispatch(addCheckpoint(4));
     // Set Interface parameters
     dispatch(initializeInterface({
       numFeatures: 3,
       numSamples: task_data.length,
       samples: JSON.stringify(task_data)
     }));
-    dispatch(resetInterface());
+    dispatch(fullReset());
     // Set stat tracker
     dispatch(initStats(task_stats));
     dispatch(resetStats());

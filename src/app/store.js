@@ -4,6 +4,8 @@ import groupReducer from './participantGroupSlice.js';
 import checkpointReducer from './checkpointSlice.js';
 import interfaceReducer from './interfaceSlice.js';
 import statReducer from './statSlice.js';
+import keypressReducer from "./keypressSlice.js";
+import statPackageReducer from "./statPackageSlice.js";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +14,7 @@ export const store = configureStore({
     checkpoints: checkpointReducer,
     interface: interfaceReducer,
     stats: statReducer,
+    keypresses: keypressReducer,
+    statPackage: statPackageReducer,
   },
 })

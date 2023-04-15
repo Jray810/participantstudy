@@ -1,10 +1,11 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { setExpState } from './app/stateSlice';
+import { useSelector } from 'react-redux';
 import SurveyForm from './SurveyForm';
 
 function UserSurvey() {
-  const dispatch = useDispatch();
+  const checkpointData = useSelector((state) => state.checkpoints.value);
+  const keypressData = useSelector((state) => state.keypresses.value);
+  const statData = useSelector((state) => state.statPackage.value);
 
   return (
     <div>
@@ -12,7 +13,7 @@ function UserSurvey() {
         <h2>Exit Survey</h2>
       </div>
       <div>
-        <SurveyForm/>
+        <SurveyForm checkpointData={checkpointData} keypressData={keypressData} statData={statData}/>
       </div>
     </div>
   )

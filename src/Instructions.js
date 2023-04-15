@@ -4,11 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addCheckpoint } from './app/checkpointSlice';
 import { setExpState } from './app/stateSlice';
-import { initializeInterface, resetInterface } from './app/interfaceSlice';
+import { fullReset, initializeInterface } from './app/interfaceSlice';
 import { analog_stats, analog_data } from './data/analogData';
 import { task_stats, task_data } from './data/taskData';
 import { initStats, resetStats } from './app/statSlice';
 import fig1 from './static/images/fig1.png';
+import { setGroup } from './app/statPackageSlice';
 
 function Instructions() {
   const dispatch = useDispatch();
@@ -25,8 +26,16 @@ function Instructions() {
   }, [groupSelector]);
 
   function begin(parGroup) {
-    // Record Checkpoint Timestamp
-    dispatch(addCheckpoint(2));
+    // Mark the group number
+    dispatch(setGroup(parGroup));
+    // Record Checkpoint Timestamp Dependent on Task
+    if (parGroup === 2) {
+      // Begin Analogy Task
+      dispatch(addCheckpoint(2));
+    } else {
+      // Begin True Task
+      dispatch(addCheckpoint(4));
+    }
     // Set interface parameters
     let samples_list = parGroup === 2 ? analog_data : task_data;
     dispatch(initializeInterface({
@@ -34,7 +43,7 @@ function Instructions() {
       numSamples: samples_list.length,
       samples: JSON.stringify(samples_list)
     }));
-    dispatch(resetInterface());
+    dispatch(fullReset());
     // Set stat tracker
     let base_stats = parGroup === 2 ? analog_stats : task_stats;
     dispatch(initStats(base_stats));

@@ -93,6 +93,7 @@ button:hover {
 
 .upper-section {
   display: flex;
+  justify-content: space-between;
 }
 
 .lower-section {
