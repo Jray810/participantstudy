@@ -33,7 +33,6 @@ export const statSlice = createSlice({
       state.value.score = 0;
     },
     calcScore: (state, action) => {
-      console.log(action.payload);
       if (action.payload === 1) {
         state.value.score = 100 - 50 * ((state.value.numSplits - state.value.minSplits) / (state.value.maxSplits - state.value.minSplits));
       } else {

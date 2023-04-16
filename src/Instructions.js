@@ -115,14 +115,17 @@ function Instructions() {
           </div>
           <div style={{paddingBottom: "0"}}>
             <iframe
-              width="853"
-              height="480"
-              src="https://www.youtube.com/embed/cWc4I4P5rzI"
-              title="This is Ultimate."
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/uShLqCJXtvk"
+              title="Instructions"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
+              allowfullscreen="true"
             />
+            <p>
+              Upon completing the activity you will be presented with a quick post-activity survey.
+            </p>
           </div>
         </div>
       }
@@ -130,7 +133,15 @@ function Instructions() {
         parGroup === 2 &&
         <div style={{paddingBottom: "0"}}>
           <div>
-            On the next page, you will be provided with a user interface and given <b>N</b> minutes to explore the system. A brief tutorial will introduce you to the interface.
+            <p>
+              On the next page, you will be provided with a user interface and given <b>15</b> minutes to explore the system. A brief tutorial will introduce you to the interface.
+            </p>
+            <p>
+              If you choose to exit early or when the time runs out, you will be presented with the study activity followed by a quick post-activity survey.
+            </p>
+            <p>
+              The entire study is expected to take around <b>30</b> minutes. Please make sure you are able to complete this study in one continuous sitting.
+            </p>
           </div>
         </div>
       }

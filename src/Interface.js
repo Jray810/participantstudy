@@ -38,6 +38,9 @@ function Interface() {
   // React states
   const [displayList, setDisplayList] = useState([...sample_list]);
 
+  // Autosubmitter
+  const [startAutoSubmit, setStartAutoSubmit] = useState(false);
+
   useEffect(() => {
     // Calculate the expression values
     if (user_interface.exprVar1 !== -1) {
@@ -136,10 +139,15 @@ function Interface() {
 
     // Check if completed
     if (user_interface.completed) {
+      let ratio = user_interface.numCompleted / user_interface.numSamples;
       // Update stats
-      dispatch(calcScore(user_interface.numCompleted / user_interface.numSamples));
+      dispatch(calcScore(ratio));
       // Increase attempts count
       dispatch(addAttempt());
+      // Autosubmit trigger
+      if (stateSelector !== 'Analogy' && ratio === 1) {
+        setStartAutoSubmit(true);
+      }
     }
   }, [user_interface]);
 
@@ -211,7 +219,7 @@ function Interface() {
     }
   }
   const clearCountdown = (e) => {
-    setCountdownMin(10);
+    setCountdownMin(15);
     setCountdownSec(0);
     if (countdownRef.current) clearInterval(countdownRef.current);
     const id = setInterval(() => {
@@ -221,7 +229,7 @@ function Interface() {
   }
   const getDeadTime = () => {
     let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 10 * 60);
+    deadline.setSeconds(deadline.getSeconds() + 15 * 60);
     return deadline;
   }
   useEffect(() => {
@@ -272,27 +280,71 @@ function Interface() {
     dispatch(openedTutorial());
   }
 
+  // Autosubmitter
+  const autosubmitRef = useRef(null);
+  const [autosubmitSec, setAutosubmitSec] = useState(0);
+  const getSecRemaining = (e) => {
+    const total = Date.parse(e) - Date.parse(new Date());
+    const seconds = Math.floor((total / 1000) % 60);
+    return {
+      total, seconds
+    };
+  }
+  const startAutoCount = (e) => {
+    let { total, minutes, seconds } = getSecRemaining(e);
+    if (total >= 0) {
+      setAutosubmitSec(seconds);
+    } else {
+      // Stop the count
+      clearInterval(autosubmitRef.current);
+      // Activate Proceed
+      proceed();
+    }
+  }
+  const clearAutoSubmit = (e) => {
+    setAutosubmitSec(10);
+    if (autosubmitRef.current) clearInterval(autosubmitRef.current);
+    const id = setInterval(() => {
+      startAutoCount(e);
+    }, 1000);
+    autosubmitRef.current = id;
+  }
+  const getAutoDeadTime = () => {
+    let deadline = new Date();
+    deadline.setSeconds(deadline.getSeconds() + 10);
+    return deadline;
+  }
+  useEffect(() => {
+    if (user_interface.completed) {
+      clearAutoSubmit(getAutoDeadTime());
+    }
+  }, [startAutoSubmit]);
+
+
   return (
     <div className='interface-container tour-home'>
       <div className='upper-section'>
         <div style={{width: "80%"}}>
-          <div>
-            <div style={{display: "flex", padding: "0"}}>
-              <div style={{padding: "0", display: "flex", flexDirection: "column", justifyContent: "center"}}>Sort Expression: </div>
-              <div className='expr-box tour-2'>
-                <div className='expr-sub-box'>{user_interface.exprVar1 === -1 ? '' : 'Feature ' + (user_interface.exprVar1 + 1)}</div>
+          {
+            !user_interface.completed &&
+            <div>
+              <div style={{display: "flex", padding: "0"}}>
+                <div style={{padding: "0", display: "flex", flexDirection: "column", justifyContent: "center"}}>Sort Expression: </div>
+                <div className='expr-box tour-2'>
+                  <div className='expr-sub-box'>{user_interface.exprVar1 === -1 ? '' : 'Feature ' + (user_interface.exprVar1 + 1)}</div>
+                  {
+                    (user_interface.exprOp !== -1 || user_interface.exprVar2 !== -1) && <div className='expr-sub-box'>{user_interface.exprOp === -1 ? (user_interface.exprVar2 === -1 ? '' : '?') : operators[user_interface.exprOp]}</div>
+                  }
+                  {
+                    (user_interface.exprOp !== -1 || user_interface.exprVar2 !== -1) && <div className='expr-sub-box'>{user_interface.exprVar2 === -1 ? '' : 'Feature ' + (user_interface.exprVar2 + 1)}</div>
+                  }
+                </div>
                 {
-                  (user_interface.exprOp !== -1 || user_interface.exprVar2 !== -1) && <div className='expr-sub-box'>{user_interface.exprOp === -1 ? (user_interface.exprVar2 === -1 ? '' : '?') : operators[user_interface.exprOp]}</div>
-                }
-                {
-                  (user_interface.exprOp !== -1 || user_interface.exprVar2 !== -1) && <div className='expr-sub-box'>{user_interface.exprVar2 === -1 ? '' : 'Feature ' + (user_interface.exprVar2 + 1)}</div>
+                  user_interface.errorMessage !== '' && <div style={{padding: "0", display: "flex", flexDirection: "column", justifyContent: "center"}}><h5 style={{color: "#900C3F"}}>Error: {user_interface.errorMessage}</h5></div>
                 }
               </div>
-              {
-                user_interface.errorMessage !== '' && <div style={{padding: "0", display: "flex", flexDirection: "column", justifyContent: "center"}}><h5 style={{color: "#900C3F"}}>Error: {user_interface.errorMessage}</h5></div>
-              }
             </div>
-          </div>
+          }
           {
             !user_interface.completed && sample_list.length !== 0 && 
             <div style={{padding: "0"}} className='tour-1'>
@@ -316,6 +368,20 @@ function Interface() {
           {
             user_interface.completed &&
             <div style={{padding: "0"}}>
+              {
+                stateSelector !== 'Analogy' && user_stats.score === 100 &&
+                <div>
+                  <p>
+                    Congratulations! You have completed the task with a score of <b>{user_stats.score}</b> using <b>{user_stats.numSplits} splits</b>! Please hit submit to end this section.
+                  </p>
+                  <p>
+                    Submitting in {autosubmitSec} seconds.
+                  </p>
+                  {
+                    clearInterval(countupRef.current)
+                  }
+                </div>
+              }
               {
                 user_stats.score >= 50 && (stateSelector === 'Analogy' || user_stats.score != 100) &&
                 <div>

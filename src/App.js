@@ -78,7 +78,7 @@ function App() {
     },
     {
       selector: '.lr-key',
-      content: 'In Move Split mode, you can use the D and A keys to move the splitting position. Note that the data must be sorted in order for the splitter to be moved. A valid position is a position where the samples on the two sides of the split belong to different classes and have different expression values.',
+      content: 'In Move Split mode, you can use the D and A keys to move the splitting position. Note that the data must be sorted in order for the splitter to be moved. A valid position is a position where the samples on the two sides of the split have different expression values.',
       position: 'bottom'
     },
     {
