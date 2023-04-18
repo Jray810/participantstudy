@@ -145,7 +145,7 @@ function Interface() {
       // Increase attempts count
       dispatch(addAttempt());
       // Autosubmit trigger
-      if (stateSelector !== 'Analogy' && ratio === 1) {
+      if (stateSelector !== 'Analogy' && ratio === 1 && user_stats.numSplits === user_stats.minSplits) {
         setStartAutoSubmit(true);
       }
     }
@@ -155,7 +155,7 @@ function Interface() {
   function retry() {
     if (stateSelector === 'Task') {
       dispatch(initializeInterface({
-        numFeatures: 3,
+        numFeatures: 4,
         numSamples: task_data.length,
         samples: JSON.stringify(task_data)
       }));
@@ -315,7 +315,7 @@ function Interface() {
     return deadline;
   }
   useEffect(() => {
-    if (user_interface.completed) {
+    if (user_interface.completed && startAutoSubmit) {
       clearAutoSubmit(getAutoDeadTime());
     }
   }, [startAutoSubmit]);

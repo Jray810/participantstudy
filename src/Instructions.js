@@ -38,11 +38,19 @@ function Instructions() {
     }
     // Set interface parameters
     let samples_list = parGroup === 2 ? analog_data : task_data;
-    dispatch(initializeInterface({
-      numFeatures: 3,
-      numSamples: samples_list.length,
-      samples: JSON.stringify(samples_list)
-    }));
+    if (parGroup === 2) {
+      dispatch(initializeInterface({
+        numFeatures: 3,
+        numSamples: samples_list.length,
+        samples: JSON.stringify(samples_list)
+      }));
+    } else {
+      dispatch(initializeInterface({
+        numFeatures: 4,
+        numSamples: samples_list.length,
+        samples: JSON.stringify(samples_list)
+      }));
+    }
     dispatch(fullReset());
     // Set stat tracker
     let base_stats = parGroup === 2 ? analog_stats : task_stats;

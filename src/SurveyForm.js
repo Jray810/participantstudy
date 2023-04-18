@@ -89,7 +89,9 @@ class SurveyForm extends React.Component {
     addDoc(collection(db, 'responses'), {
       checkpoints: checkpoints,
       keypresses: this.state.keypress,
-      stats: stats
+      stats: stats,
+      survey: survey,
+      timestamp: serverTimestamp()
     })
 
     // Submit state

@@ -1,5 +1,5 @@
 export const task_stats = {
-  maxSplits: 7,
+  maxSplits: 9,
   minSplits: 3
 }
 
