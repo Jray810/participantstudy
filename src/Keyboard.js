@@ -166,7 +166,8 @@ function Keyboard() {
           playAudio();
           dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: true}));
         } else {
-          if (user_interface.splitPosition !== user_interface.numSamples + 1) {
+          let sample_list = user_interface.completed ? [] : JSON.parse(user_interface.currSamples);
+          if (user_interface.splitPosition !== sample_list.length) {
             dispatch(moveSplit(1));
             dispatch(logKeypress({logging: !user_interface.completed, taskType: stateSelector, erroneous: false}));
           } else {

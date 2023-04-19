@@ -430,7 +430,7 @@ function Interface() {
           }
           {
               user_interface.mode === 3 &&
-              <div className='focus-box'>{user_interface.splitPosition === 0 || user_interface.splitPosition === user_interface.numSamples || displayList[user_interface.splitPosition - 1].calcExpr === displayList[user_interface.splitPosition + 1].calcExpr ? 'Invalid' : 'Valid'}</div>
+              <div className='focus-box'>{user_interface.splitPosition === 0 || user_interface.splitPosition === sample_list.length || displayList[user_interface.splitPosition - 1].calcExpr === displayList[user_interface.splitPosition + 1].calcExpr ? 'Invalid' : 'Valid'}</div>
           }
           <Keyboard/>
           <div className='user-manual' onClick={() => startTour()}><img style={{height: '1rem'}} src={helpIcon}/> <span>User Manual</span></div>
