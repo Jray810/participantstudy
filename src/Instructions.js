@@ -37,23 +37,31 @@ function Instructions() {
       dispatch(addCheckpoint(4));
     }
     // Set interface parameters
-    let samples_list = parGroup === 2 ? analog_data : task_data;
-    if (parGroup === 2) {
-      dispatch(initializeInterface({
-        numFeatures: 3,
-        numSamples: samples_list.length,
-        samples: JSON.stringify(samples_list)
-      }));
-    } else {
-      dispatch(initializeInterface({
-        numFeatures: 4,
-        numSamples: samples_list.length,
-        samples: JSON.stringify(samples_list)
-      }));
-    }
+    // let samples_list = parGroup === 2 ? analog_data : task_data;
+    let samples_list = analog_data;
+    // Set same dataset for analogy and experiment
+    // if (parGroup === 2) {
+    //   dispatch(initializeInterface({
+    //     numFeatures: 3,
+    //     numSamples: samples_list.length,
+    //     samples: JSON.stringify(samples_list)
+    //   }));
+    // } else {
+    //   dispatch(initializeInterface({
+    //     numFeatures: 4,
+    //     numSamples: samples_list.length,
+    //     samples: JSON.stringify(samples_list)
+    //   }));
+    // }
+    dispatch(initializeInterface({
+      numFeatures: 3,
+      numSamples: samples_list.length,
+      samples: JSON.stringify(samples_list)
+    }));
     dispatch(fullReset());
     // Set stat tracker
-    let base_stats = parGroup === 2 ? analog_stats : task_stats;
+    // let base_stats = parGroup === 2 ? analog_stats : task_stats;
+    let base_stats = analog_stats;
     dispatch(initStats(base_stats));
     dispatch(resetStats());
     // Navigate to State Dependent Page

@@ -153,19 +153,25 @@ function Interface() {
 
   // Retry
   function retry() {
-    if (stateSelector === 'Task') {
-      dispatch(initializeInterface({
-        numFeatures: 4,
-        numSamples: task_data.length,
-        samples: JSON.stringify(task_data)
-      }));
-    } else {
-      dispatch(initializeInterface({
-        numFeatures: 3,
-        numSamples: analog_data.length,
-        samples: JSON.stringify(analog_data)
-      }));
-    }
+    // if (stateSelector === 'Task') {
+    //   dispatch(initializeInterface({
+    //     numFeatures: 4,
+    //     numSamples: task_data.length,
+    //     samples: JSON.stringify(task_data)
+    //   }));
+    // } else {
+    //   dispatch(initializeInterface({
+    //     numFeatures: 3,
+    //     numSamples: analog_data.length,
+    //     samples: JSON.stringify(analog_data)
+    //   }));
+    // }
+    dispatch(initializeInterface({
+      numFeatures: 3,
+      numSamples: analog_data.length,
+      samples: JSON.stringify(analog_data)
+    }));
+
     dispatch(fullReset());
     dispatch(resetSplit());
   }

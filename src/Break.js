@@ -4,6 +4,7 @@ import { setExpState } from './app/stateSlice';
 import { addCheckpoint } from './app/checkpointSlice';
 import { fullReset, initializeInterface } from './app/interfaceSlice';
 import { task_data, task_stats } from './data/taskData';
+import { analog_stats, analog_data } from './data/analogData';
 import { initStats, resetStats } from './app/statSlice';
 
 function Break() {
@@ -15,12 +16,12 @@ function Break() {
     // Set Interface parameters
     dispatch(initializeInterface({
       numFeatures: 3,
-      numSamples: task_data.length,
-      samples: JSON.stringify(task_data)
+      numSamples: analog_data.length,
+      samples: JSON.stringify(analog_stats)
     }));
     dispatch(fullReset());
     // Set stat tracker
-    dispatch(initStats(task_stats));
+    dispatch(initStats(analog_stats));
     dispatch(resetStats());
     // Navigate to Task Page
     dispatch(setExpState('Task'));
